@@ -1,0 +1,54 @@
+
+-- Create Customer Table
+CREATE TABLE Customer (
+    Customer_ID NUMBER(5) PRIMARY KEY,
+    Customer_Name VARCHAR2(30) NOT NULL,
+    City VARCHAR2(30)
+);
+
+-- Create Orders Table
+CREATE TABLE Orders (
+    Order_ID NUMBER(5) PRIMARY KEY,
+    Order_Date DATE,
+    Amount NUMBER(10),
+    Customer_ID NUMBER(5),
+    CONSTRAINT fk_customer
+    FOREIGN KEY (Customer_ID)
+    REFERENCES Customer(Customer_ID)
+);
+
+-- Insert Customer Records
+INSERT INTO Customer
+VALUES (1, 'Arun', 'Chennai');
+
+INSERT INTO Customer
+VALUES (2, 'Priya', 'Madurai');
+
+INSERT INTO Customer
+VALUES (3, 'Kumar', 'Coimbatore');
+
+-- Insert Orders Records
+INSERT INTO Orders
+VALUES (101, TO_DATE('10-01-2026','DD-MM-YYYY'), 2500, 1);
+
+INSERT INTO Orders
+VALUES (102, TO_DATE('12-01-2026','DD-MM-YYYY'), 1800, 2);
+
+INSERT INTO Orders
+VALUES (103, TO_DATE('15-01-2026','DD-MM-YYYY'), 3200, 1);
+
+INSERT INTO Orders
+VALUES (104, TO_DATE('20-01-2026','DD-MM-YYYY'), 1500, 3);
+
+-- Display Customer Table
+SELECT * FROM Customer;
+
+-- Display Orders Table
+SELECT * FROM Orders;
+
+-- Test Referential Integrity
+INSERT INTO Orders
+VALUES (105, TO_DATE('25-01-2026','DD-MM-YYYY'), 2000, 5);
+
+-- Exit
+EXIT;

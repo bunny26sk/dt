@@ -1,0 +1,40 @@
+
+-- Create Book Table
+CREATE TABLE Book (
+    Book_ID NUMBER(5) PRIMARY KEY,
+    Book_Name VARCHAR2(40),
+    Category VARCHAR2(20),
+    Price NUMBER(10)
+);
+
+-- Insert Book Records
+INSERT INTO Book VALUES (1, 'SQL Basics', 'Database', 450);
+
+INSERT INTO Book VALUES (2, 'Python Guide', 'Programming', 600);
+
+INSERT INTO Book VALUES (3, 'Java Basics', 'Programming', 500);
+
+INSERT INTO Book VALUES (4, 'Web Design', 'Web', 300);
+
+INSERT INTO Book VALUES (5, 'DBMS Guide', 'Database', 400);
+
+-- Display All Book Records
+SELECT * FROM Book;
+
+-- Display Books Priced Above 300
+SELECT *
+FROM Book
+WHERE Price > 300;
+
+-- Aggregate Functions for Database Category
+SELECT
+    COUNT(*) AS Total_Books,
+    SUM(Price) AS Total_Price,
+    AVG(Price) AS Average_Price,
+    MAX(Price) AS Highest_Price,
+    MIN(Price) AS Lowest_Price
+FROM Book
+WHERE Category = 'Database';
+
+-- Stop the Program
+EXIT;

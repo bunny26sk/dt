@@ -1,0 +1,69 @@
+
+
+-- Create Database Table
+-- Oracle uses the connected user schema.
+-- Create Product Table
+
+CREATE TABLE Product (
+    Product_ID NUMBER(5) PRIMARY KEY,
+    Product_Name VARCHAR2(30),
+    Category VARCHAR2(20),
+    Price NUMBER(10)
+);
+
+-- Insert Product Records
+INSERT INTO Product VALUES (101, 'Keyboard', 'Electronics', 800);
+
+INSERT INTO Product VALUES (102, 'Mouse', 'Electronics', 500);
+
+INSERT INTO Product VALUES (103, 'Notebook', 'Stationery', 100);
+
+-- Display Initial Records
+SELECT * FROM Product;
+
+-- Update Product Price
+UPDATE Product
+SET Price = 900
+WHERE Product_ID = 101;
+
+-- Display Records After UPDATE
+SELECT * FROM Product;
+
+-- Delete a Product
+DELETE FROM Product
+WHERE Product_ID = 103;
+
+-- Display Records After DELETE
+SELECT * FROM Product;
+
+-- Add a New Column
+ALTER TABLE Product
+ADD Stock NUMBER(5);
+
+-- Display Table Structure
+DESC Product;
+
+-- Update Stock Values
+UPDATE Product
+SET Stock = 20
+WHERE Product_ID = 101;
+
+UPDATE Product
+SET Stock = 35
+WHERE Product_ID = 102;
+
+-- Display Records After ALTER TABLE
+SELECT * FROM Product;
+
+-- Remove All Records
+TRUNCATE TABLE Product;
+
+-- Display Empty Table
+SELECT * FROM Product;
+
+-- Stop the Program
+EXIT;
+
+
+-- Stop the Program
+EXIT;

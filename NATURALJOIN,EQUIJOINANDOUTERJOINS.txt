@@ -1,0 +1,70 @@
+
+-- Create Vehicle Table
+CREATE TABLE Vehicle (
+    Vehicle_ID NUMBER(5) PRIMARY KEY,
+    Vehicle_Name VARCHAR2(30),
+    Type_ID NUMBER(5)
+);
+
+-- Create VehicleType Table
+CREATE TABLE VehicleType (
+    Type_ID NUMBER(5),
+    Type_Name VARCHAR2(30)
+);
+
+-- Insert Vehicle Records
+INSERT INTO Vehicle VALUES (1, 'Honda City', 10);
+
+INSERT INTO Vehicle VALUES (2, 'Royal Enfield', 20);
+
+INSERT INTO Vehicle VALUES (3, 'Hyundai i20', 10);
+
+INSERT INTO Vehicle VALUES (4, 'Hero Cycle', 30);
+
+-- Insert VehicleType Records
+INSERT INTO VehicleType VALUES (10, 'Car');
+
+INSERT INTO VehicleType VALUES (20, 'Bike');
+
+INSERT INTO VehicleType VALUES (40, 'Bus');
+
+-- Display Vehicle Table
+SELECT * FROM Vehicle;
+
+-- Display VehicleType Table
+SELECT * FROM VehicleType;
+
+-- 1. NATURAL JOIN
+SELECT *
+FROM Vehicle
+NATURAL JOIN VehicleType;
+
+-- 2. EQUI JOIN
+SELECT Vehicle.Vehicle_ID,
+       Vehicle.Vehicle_Name,
+       Vehicle.Type_ID,
+       VehicleType.Type_Name
+FROM Vehicle
+JOIN VehicleType
+ON Vehicle.Type_ID = VehicleType.Type_ID;
+
+-- 3. LEFT OUTER JOIN
+SELECT Vehicle.Vehicle_ID,
+       Vehicle.Vehicle_Name,
+       Vehicle.Type_ID,
+       VehicleType.Type_Name
+FROM Vehicle
+LEFT OUTER JOIN VehicleType
+ON Vehicle.Type_ID = VehicleType.Type_ID;
+
+-- 4. RIGHT OUTER JOIN
+SELECT Vehicle.Vehicle_ID,
+       Vehicle.Vehicle_Name,
+       VehicleType.Type_ID,
+       VehicleType.Type_Name
+FROM Vehicle
+RIGHT OUTER JOIN VehicleType
+ON Vehicle.Type_ID = VehicleType.Type_ID;
+
+-- Stop the Program
+EXIT;

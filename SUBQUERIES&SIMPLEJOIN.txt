@@ -1,0 +1,70 @@
+
+-- Create Publisher Table
+CREATE TABLE Publisher (
+    Publisher_ID NUMBER(5) PRIMARY KEY,
+    Publisher_Name VARCHAR2(30)
+);
+
+-- Create LibraryBook Table
+CREATE TABLE LibraryBook (
+    Book_ID NUMBER(5) PRIMARY KEY,
+    Book_Name VARCHAR2(30),
+    Price NUMBER(10),
+    Publisher_ID NUMBER(5)
+);
+
+-- Insert Publisher Records
+INSERT INTO Publisher VALUES (10, 'Sun Publications');
+
+INSERT INTO Publisher VALUES (20, 'Tech Publications');
+
+INSERT INTO Publisher VALUES (30, 'Global Books');
+
+-- Insert LibraryBook Records
+INSERT INTO LibraryBook VALUES (1, 'SQL Guide', 450, 10);
+
+INSERT INTO LibraryBook VALUES (2, 'Python Guide', 600, 20);
+
+INSERT INTO LibraryBook VALUES (3, 'Java Guide', 500, 10);
+
+INSERT INTO LibraryBook VALUES (4, 'Web Design', 350, 30);
+
+INSERT INTO LibraryBook VALUES (5, 'C Programming', 400, NULL);
+
+-- Display Publisher Table
+SELECT * FROM Publisher;
+
+-- Display LibraryBook Table
+SELECT * FROM LibraryBook;
+
+-- 1. WHERE Clause
+SELECT *
+FROM LibraryBook
+WHERE Price > 400;
+
+-- 2. Subquery Using IN
+SELECT Book_Name, Price
+FROM LibraryBook
+WHERE Publisher_ID IN (
+    SELECT Publisher_ID
+    FROM Publisher
+    WHERE Publisher_Name IN
+    ('Sun Publications', 'Tech Publications')
+);
+
+-- 3. INNER JOIN
+SELECT LibraryBook.Book_Name,
+       Publisher.Publisher_Name
+FROM LibraryBook
+INNER JOIN Publisher
+ON LibraryBook.Publisher_ID = Publisher.Publisher_ID;
+
+-- 4. LEFT JOIN
+SELECT LibraryBook.Book_Name,
+       Publisher.Publisher_Name
+FROM LibraryBook
+LEFT JOIN Publisher
+ON LibraryBook.Publisher_ID = Publisher.Publisher_ID;
+
+-- Stop the Program
+EXIT;
