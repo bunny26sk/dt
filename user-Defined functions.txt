@@ -1,0 +1,121 @@
+SET SERVEROUTPUT ON;
+
+-- Create Employee Table
+
+CREATE TABLE Employee
+(
+    EmpID NUMBER PRIMARY KEY,
+    EmpName VARCHAR2(50),
+    Department VARCHAR2(50),
+    Salary NUMBER(10,2),
+    Email VARCHAR2(100)
+);
+
+-- Insert Employee Record
+
+INSERT INTO Employee VALUES
+(101, 'Rajesh Kumar', 'IT', 50000,
+ 'rajesh@company.com');
+
+COMMIT;
+
+
+-- 1. Scalar Function
+
+CREATE OR REPLACE FUNCTION CalculateBonus
+(
+    p_Salary NUMBER
+)
+RETURN NUMBER
+IS
+BEGIN
+    RETURN p_Salary * 0.10;
+END;
+/
+
+-- Execute Scalar Function
+
+SELECT EmpName, Salary,
+CalculateBonus(Salary) AS Bonus
+FROM Employee;
+
+
+-- 2. REF CURSOR Function
+
+CREATE OR REPLACE FUNCTION GetEmployeesByDept
+(
+    p_Dept VARCHAR2
+)
+RETURN SYS_REFCURSOR
+IS
+    emp_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN emp_cursor FOR
+    SELECT EmpID, EmpName, Salary
+    FROM Employee
+    WHERE Department = p_Dept;
+
+    RETURN emp_cursor;
+END;
+/
+
+-- Execute REF CURSOR Function
+
+VARIABLE result REFCURSOR;
+
+EXEC :result := GetEmployeesByDept('IT');
+
+PRINT result;
+
+
+-- 3. Stored Procedure
+
+CREATE OR REPLACE PROCEDURE AddEmployee
+(
+    p_EmpID NUMBER,
+    p_EmpName VARCHAR2,
+    p_Department VARCHAR2,
+    p_Salary NUMBER,
+    p_Email VARCHAR2
+)
+IS
+BEGIN
+    IF p_Salary > 0 THEN
+
+        INSERT INTO Employee
+        (
+            EmpID,
+            EmpName,
+            Department,
+            Salary,
+            Email
+        )
+        VALUES
+        (
+            p_EmpID,
+            p_EmpName,
+            p_Department,
+            p_Salary,
+            p_Email
+        );
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Employee added successfully'
+        );
+
+    ELSE
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Invalid Salary'
+        );
+
+    END IF;
+
+END;
+/
+
+-- Execute Stored Procedure
+
+EXEC AddEmployee(106, 'Vikram Desai', 'IT', 45000, 'vikram@company.com');
+
+COMMIT;
