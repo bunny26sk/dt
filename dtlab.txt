@@ -754,3 +754,120 @@ PL/SQL procedure successfully completed.
 
 Result
 Thus, user-defined functions and stored procedures were successfully created and executed to calculate employee bonuses, retrieve department details, and insert employee records.
+
+PROGRAM 7: TRANSACTIONS AND DCL AND TCL COMMANDS
+
+Aim
+
+To execute database transactions using COMMIT, ROLLBACK, SAVEPOINT and implement DCL commands to maintain database security and consistency.
+
+Procedure
+
+1. Select the Employee database table.
+2. Begin a transaction using BEGIN TRANSACTION.
+3. Update employee salaries and commit the changes.
+4. Perform a DELETE operation and use ROLLBACK.
+5. Create a savepoint and perform additional operations.
+6. Execute GRANT and REVOKE commands.
+7. Display the final records and stop the program.
+
+Source Code
+
+SET SERVEROUTPUT ON;
+
+-- 1. COMMIT
+
+PROMPT COMMIT:
+
+UPDATE Employee
+SET Salary = Salary + 5000
+WHERE Department = 'IT';
+
+COMMIT;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction committed successfully.');
+END;
+/
+
+-- 2. ROLLBACK
+
+PROMPT ROLLBACK:
+
+DELETE FROM Employee
+WHERE EmpID = 999;
+
+ROLLBACK;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction rolled back successfully.');
+END;
+/
+
+-- 3. SAVEPOINT
+
+PROMPT SAVEPOINT:
+
+UPDATE Employee
+SET Salary = Salary + 2000
+WHERE EmpID = 101;
+
+SAVEPOINT sp1;
+
+UPDATE Employee
+SET Salary = Salary + 3000
+WHERE EmpID = 101;
+
+ROLLBACK TO sp1;
+
+COMMIT;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction rolled back to savepoint sp1.');
+END;
+/
+
+-- 4. DCL COMMANDS
+
+PROMPT DCL:
+
+GRANT SELECT ON Employee TO PUBLIC;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('GRANT command executed successfully.');
+END;
+/
+
+REVOKE SELECT ON Employee FROM PUBLIC;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('REVOKE command executed successfully.');
+END;
+/
+
+-- DISPLAY RECORDS
+
+SELECT * FROM Employee;
+
+COMMIT;
+
+COMMIT:
+Transaction committed successfully.
+
+ROLLBACK:
+Transaction rolled back successfully.
+
+SAVEPOINT:
+Transaction rolled back to savepoint sp1.
+
+DCL:
+GRANT command executed successfully.
+REVOKE command executed successfully.
+
+  EMPID                      EMPNAME             DEPARTMENT            SALARY                EMAIL
+   101                      Rajesh Kumar             IT                57000          rajesh@company.com
+   106                      Vikram Desai             IT                50000          vikram@company.com
+
+Result
+
+Thus, database transactions were successfully executed using COMMIT, ROLLBACK and SAVEPOINT, and database permissions were managed using GRANT and REVOKE commands.
