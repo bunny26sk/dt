@@ -871,3 +871,150 @@ REVOKE command executed successfully.
 Result
 
 Thus, database transactions were successfully executed using COMMIT, ROLLBACK and SAVEPOINT, and database permissions were managed using GRANT and REVOKE commands.
+
+PROGRAM 8: SQL TRIGGERS
+
+Aim
+
+To create and execute SQL triggers for INSERT, UPDATE and DELETE operations to maintain data integrity and enforce business rules.
+
+Procedure
+
+1. Select the database containing the Employee table.
+2. Create an AuditLog table.
+3. Create an AFTER INSERT trigger to record employee additions.
+4. Create an AFTER UPDATE trigger to record salary changes.
+5. Create an AFTER DELETE trigger to record deleted employees.
+6. Execute INSERT, UPDATE and DELETE operations.
+7. Verify the trigger results using the AuditLog table
+
+Source Code
+
+-- PROGRAM 8: SQL TRIGGERS
+-- Aim: To create and execute SQL triggers for INSERT,
+-- UPDATE and DELETE operations.
+
+-- STEP 1: CONNECT AS SYSDBA
+
+CONN / AS SYSDBA
+
+-- STEP 2: CREATE STUDENT USER
+
+CREATE USER STUDENT IDENTIFIED BY STUDENT;
+
+GRANT CONNECT, RESOURCE TO STUDENT;
+
+ALTER USER STUDENT QUOTA UNLIMITED ON USERS;
+
+-- STEP 3: CONNECT AS STUDENT
+
+CONN STUDENT/STUDENT
+
+-- STEP 4: CREATE EMPLOYEE TABLE
+
+CREATE TABLE Employee
+(
+    EmpID NUMBER PRIMARY KEY,
+    EmpName VARCHAR2(50),
+    Department VARCHAR2(50),
+    Salary NUMBER,
+    Email VARCHAR2(100)
+);
+
+-- STEP 5: INSERT SAMPLE RECORDS
+
+INSERT INTO Employee
+VALUES (101, 'Arun', 'IT', 40000, 'arun@gmail.com');
+
+INSERT INTO Employee
+VALUES (102, 'Priya', 'HR', 35000, 'priya@gmail.com');
+
+COMMIT;
+
+-- STEP 6: CREATE AUDITLOG TABLE
+
+CREATE TABLE AuditLog
+(
+    ActionType VARCHAR2(20),
+    EmployeeID NUMBER,
+    EmployeeName VARCHAR2(50)
+);
+
+-- STEP 7: CREATE INSERT TRIGGER
+
+CREATE OR REPLACE TRIGGER trg_Insert
+AFTER INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO AuditLog
+    VALUES ('INSERT', :NEW.EmpID, :NEW.EmpName);
+END;
+/
+
+-- STEP 8: CREATE UPDATE TRIGGER
+
+CREATE OR REPLACE TRIGGER trg_Update
+AFTER UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO AuditLog
+    VALUES ('UPDATE', :NEW.EmpID, :NEW.EmpName);
+END;
+/
+
+-- STEP 9: CREATE DELETE TRIGGER
+
+CREATE OR REPLACE TRIGGER trg_Delete
+AFTER DELETE ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO AuditLog
+    VALUES ('DELETE', :OLD.EmpID, :OLD.EmpName);
+END;
+/
+
+-- STEP 10: TEST INSERT OPERATION
+
+INSERT INTO Employee
+(EmpID, EmpName, Department, Salary, Email)
+VALUES
+(107, 'Neha Sharma', 'IT', 48000,
+'neha@company.com');
+
+-- STEP 11: TEST UPDATE OPERATION
+
+UPDATE Employee
+SET Salary = 52000
+WHERE EmpID = 107;
+
+-- STEP 12: TEST DELETE OPERATION
+
+DELETE FROM Employee
+WHERE EmpID = 107;
+
+-- STEP 13: SAVE CHANGES
+
+COMMIT;
+
+-- STEP 14: DISPLAY AUDIT LOG
+
+SELECT * FROM AuditLog;
+
+-- STEP 15: CHECK TRIGGER STATUS
+
+SELECT TRIGGER_NAME, STATUS
+FROM USER_TRIGGERS;
+
+-- END OF PROGRAM
+
+Output
+
+AuditLog Table
+Action	EmployeeID	EmployeeName
+INSERT	107	Neha Sharma
+UPDATE	107	Neha Sharma
+DELETE	107	Neha Sharma
+
+Result
+
+Thus, SQL triggers were successfully created and executed for INSERT, UPDATE and DELETE operations to maintain database integrity and record employee activities.
