@@ -1,0 +1,77 @@
+SET SERVEROUTPUT ON;
+
+-- 1. COMMIT
+
+PROMPT COMMIT:
+
+UPDATE Employee
+SET Salary = Salary + 5000
+WHERE Department = 'IT';
+
+COMMIT;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction committed successfully.');
+END;
+/
+
+-- 2. ROLLBACK
+
+PROMPT ROLLBACK:
+
+DELETE FROM Employee
+WHERE EmpID = 999;
+
+ROLLBACK;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction rolled back successfully.');
+END;
+/
+
+-- 3. SAVEPOINT
+
+PROMPT SAVEPOINT:
+
+UPDATE Employee
+SET Salary = Salary + 2000
+WHERE EmpID = 101;
+
+SAVEPOINT sp1;
+
+UPDATE Employee
+SET Salary = Salary + 3000
+WHERE EmpID = 101;
+
+ROLLBACK TO sp1;
+
+COMMIT;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Transaction rolled back to savepoint sp1.');
+END;
+/
+
+-- 4. DCL COMMANDS
+
+PROMPT DCL:
+
+GRANT SELECT ON Employee TO PUBLIC;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('GRANT command executed successfully.');
+END;
+/
+
+REVOKE SELECT ON Employee FROM PUBLIC;
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('REVOKE command executed successfully.');
+END;
+/
+
+-- DISPLAY RECORDS
+
+SELECT * FROM Employee;
+
+COMMIT;
