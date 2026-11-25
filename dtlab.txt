@@ -594,3 +594,163 @@ NULL                        NULL                         40                Bus
 Result
 
 Thus, Natural Join, Equi Join, Left Outer Join and Right Outer Join were executed successfully to retrieve vehicle and vehicle type details.
+
+PROGRAM 6 – USER DEFINED FUNCTIONS AND STORED PROCEDURES
+
+Aim:
+
+To create and execute user-defined functions and stored procedures in SQL to calculate employee bonuses, retrieve department details, and insert employee records.
+
+Procedure:
+1. Create the Employee table.
+2. Insert employee records into the table.
+3. Create a scalar function to calculate employee bonus.
+4. Execute the function and display employee bonus details.
+5. Create a REF CURSOR function to retrieve department-wise employee details.
+6. Create a stored procedure to insert employee records.
+7. Execute the procedure and display the results.
+
+Source Code: 
+
+SET SERVEROUTPUT ON;
+
+-- Create Employee Table
+
+CREATE TABLE Employee
+(
+    EmpID NUMBER PRIMARY KEY,
+    EmpName VARCHAR2(50),
+    Department VARCHAR2(50),
+    Salary NUMBER(10,2),
+    Email VARCHAR2(100)
+);
+
+-- Insert Employee Record
+
+INSERT INTO Employee VALUES
+(101, 'Rajesh Kumar', 'IT', 50000,
+ 'rajesh@company.com');
+
+COMMIT;
+
+
+-- 1. Scalar Function
+
+CREATE OR REPLACE FUNCTION CalculateBonus
+(
+    p_Salary NUMBER
+)
+RETURN NUMBER
+IS
+BEGIN
+    RETURN p_Salary * 0.10;
+END;
+/
+
+-- Execute Scalar Function
+
+SELECT EmpName, Salary,
+CalculateBonus(Salary) AS Bonus
+FROM Employee;
+
+
+-- 2. REF CURSOR Function
+
+CREATE OR REPLACE FUNCTION GetEmployeesByDept
+(
+    p_Dept VARCHAR2
+)
+RETURN SYS_REFCURSOR
+IS
+    emp_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN emp_cursor FOR
+    SELECT EmpID, EmpName, Salary
+    FROM Employee
+    WHERE Department = p_Dept;
+
+    RETURN emp_cursor;
+END;
+/
+
+-- Execute REF CURSOR Function
+
+VARIABLE result REFCURSOR;
+
+EXEC :result := GetEmployeesByDept('IT');
+
+PRINT result;
+
+
+-- 3. Stored Procedure
+
+CREATE OR REPLACE PROCEDURE AddEmployee
+(
+    p_EmpID NUMBER,
+    p_EmpName VARCHAR2,
+    p_Department VARCHAR2,
+    p_Salary NUMBER,
+    p_Email VARCHAR2
+)
+IS
+BEGIN
+    IF p_Salary > 0 THEN
+
+        INSERT INTO Employee
+        (
+            EmpID,
+            EmpName,
+            Department,
+            Salary,
+            Email
+        )
+        VALUES
+        (
+            p_EmpID,
+            p_EmpName,
+            p_Department,
+            p_Salary,
+            p_Email
+        );
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Employee added successfully'
+        );
+
+    ELSE
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Invalid Salary'
+        );
+
+    END IF;
+
+END;
+/
+
+-- Execute Stored Procedure
+
+EXEC AddEmployee(106, 'Vikram Desai', 'IT', 45000, 'vikram@company.com');
+
+COMMIT;
+
+Output
+
+1. Scalar Function
+EMPNAME          SALARY       BONUS
+Rajesh Kumar     50000        5000
+
+
+2. REF CURSOR Function
+EMPID    EMPNAME          SALARY
+101      Rajesh Kumar     50000
+
+
+3. Stored Procedure
+Employee added successfully
+
+PL/SQL procedure successfully completed.
+
+
+Result
+Thus, user-defined functions and stored procedures were successfully created and executed to calculate employee bonuses, retrieve department details, and insert employee records.
